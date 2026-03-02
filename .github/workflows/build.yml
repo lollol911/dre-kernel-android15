@@ -23,9 +23,9 @@ jobs:
 
       - name: Download Clang Toolchain
         run: |
-          wget https://github.com/lollol911/dre-kernel-android15/releases/download/clang/linux-x86-722c840a8e4d58b5ebdab62ce78eacdafd301208-clang-r450784e.tar.gz -O clang-toolchain.tgz
+          wget https://github.com/lollol911/dre-kernel-android15/releases/download/clang/linux-x86-722c840a8e4d58b5ebdab62ce78eacdafd301208-clang-r450784e.tar.gz -O clang-toolchain.tar.gz
           mkdir -p $HOME/clang-toolchain
-          tar -xzf clang-toolchain.tgz -C $HOME/clang-toolchain --strip-components=1
+          tar -xzf clang-toolchain.tar.gz -C $HOME/clang-toolchain --strip-components=1
           echo "$HOME/clang-toolchain/bin" >> $GITHUB_PATH
 
       - name: Build Kernel
@@ -34,10 +34,9 @@ jobs:
           export ARCH=arm64
           export O=out
           export PATH=$HOME/clang-toolchain/bin:$PATH
-          # Generate config from dre_defconfig
+          # Generate config and immediately build
           make O=$O ARCH=$ARCH KCONFIG_CONFIG=arch/arm64/configs/dre_defconfig olddefconfig
-          # Build the kernel using clang
-          make -j$(nproc) O=$O ARCH=$ARCH CC=clang
+          make -j$(nproc) O=$O ARCH=$ARCH CC=clang KCONFIG_CONFIG=arch/arm64/configs/dre_defconfig
 
       - name: Package AnyKernel3
         run: |
