@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip
+          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip gcc-aarch64-linux-gnu
 
       - name: Download Clang
         run: |
