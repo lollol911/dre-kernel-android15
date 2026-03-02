@@ -19,14 +19,14 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip tar
+          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip tar xz-utils
 
-      - name: Download Clang 19
+      - name: Download Proton Clang
         run: |
-          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/tags/clang-r19.0.9.tar.gz -O clang-19.tar.gz
-          mkdir -p $HOME/clang-19
-          tar -xzf clang-19.tar.gz -C $HOME/clang-19 --strip-components=1
-          echo "$HOME/clang-19/bin" >> $GITHUB_PATH
+          wget https://github.com/kdrag0n/proton-clang/releases/latest/download/proton-clang-linux-x86.tar.xz -O proton-clang.tar.xz
+          mkdir -p $HOME/proton-clang
+          tar -xf proton-clang.tar.xz -C $HOME/proton-clang
+          echo "$HOME/proton-clang/bin" >> $GITHUB_PATH
 
       - name: Build Kernel
         run: |
