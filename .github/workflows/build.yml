@@ -19,12 +19,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip
+          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip tar
 
       - name: Download Clang 19
         run: |
-          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/refs/tags/clang-r19-linux-x86.zip?format=zip -O clang-19.zip
-          unzip clang-19.zip -d $HOME/clang-19
+          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/tags/clang-r19.0.9.tar.gz -O clang-19.tar.gz
+          mkdir -p $HOME/clang-19
+          tar -xzf clang-19.tar.gz -C $HOME/clang-19 --strip-components=1
           echo "$HOME/clang-19/bin" >> $GITHUB_PATH
 
       - name: Build Kernel
