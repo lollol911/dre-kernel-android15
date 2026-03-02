@@ -33,8 +33,8 @@ jobs:
           cd dre-kernel-source
           export ARCH=arm64
           export O=out
-          make O=$O dre_defconfig
-          make -j$(nproc) O=$O CC=clang
+          make O=$O ARCH=$ARCH KCONFIG_CONFIG=arch/arm64/configs/dre_defconfig olddefconfig
+          make -j$(nproc) O=$O ARCH=$ARCH CC=clang
 
       - name: Package AnyKernel3
         run: |
