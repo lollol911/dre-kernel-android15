@@ -1,0 +1,50 @@
+name: Build OnePlus N200 Kernel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip
+
+      - name: Download Clang 19
+        run: |
+          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-19.zip
+          unzip clang-19.zip -d $HOME/clang-19
+          echo "$HOME/clang-19/bin" >> $GITHUB_PATH
+
+      - name: Build Kernel
+        run: |
+          cd dre-kernel-source
+          export ARCH=arm64
+          export O=out
+          make O=$O dre_defconfig
+          make -j$(nproc) O=$O CC=clang
+
+      - name: Package AnyKernel3
+        run: |
+          mkdir -p kernel-zip
+          cp dre-kernel-source/out/arch/arm64/boot/Image.gz-dtb kernel-zip/
+          cp -r AnyKernel3/* kernel-zip/
+          zip -r kernel-build.zip kernel-zip/
+          mv kernel-build.zip $GITHUB_WORKSPACE/kernel-build.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: kernel-build
+          path: kernel-build.zip
