@@ -19,13 +19,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip tar xz-utils
+          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip
 
-      - name: Download Clang Toolchain
+      - name: Download Clang
         run: |
-          wget https://github.com/lollol911/dre-kernel-android15/releases/download/clang/linux-x86-722c840a8e4d58b5ebdab62ce78eacdafd301208-clang-r450784e.tar.gz -O clang-toolchain.tar.gz
+          wget https://github.com/lollol911/dre-kernel-android15/releases/download/clang/linux-x86-722c840a8e4d58b5ebdab62ce78eacdafd301208-clang-r450784e.tar.gz -O clang.tar.gz
           mkdir -p $HOME/clang-toolchain
-          tar -xzf clang-toolchain.tar.gz -C $HOME/clang-toolchain --strip-components=1
+          tar -xf clang.tar.gz -C $HOME/clang-toolchain
           echo "$HOME/clang-toolchain/bin" >> $GITHUB_PATH
 
       - name: Build Kernel
@@ -34,9 +34,13 @@ jobs:
           export ARCH=arm64
           export O=out
           export PATH=$HOME/clang-toolchain/bin:$PATH
-          # Generate config and immediately build
+          export CC=clang
+          export LD=ld.lld
+          export CROSS_COMPILE=aarch64-linux-gnu-
+          # Generate .config from dre_defconfig
           make O=$O ARCH=$ARCH KCONFIG_CONFIG=arch/arm64/configs/dre_defconfig olddefconfig
-          make -j$(nproc) O=$O ARCH=$ARCH CC=clang KCONFIG_CONFIG=arch/arm64/configs/dre_defconfig
+          # Build the kernel
+          make -j$(nproc) O=$O ARCH=$ARCH CC=$CC LD=$LD CROSS_COMPILE=$CROSS_COMPILE
 
       - name: Package AnyKernel3
         run: |
