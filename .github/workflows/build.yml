@@ -21,12 +21,12 @@ jobs:
           sudo apt update
           sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip tar xz-utils
 
-      - name: Download Proton Clang
+      - name: Download Clang Toolchain
         run: |
-          wget https://github.com/kdrag0n/proton-clang/releases/latest/download/proton-clang-linux-x86.tar.xz -O proton-clang.tar.xz
-          mkdir -p $HOME/proton-clang
-          tar -xf proton-clang.tar.xz -C $HOME/proton-clang
-          echo "$HOME/proton-clang/bin" >> $GITHUB_PATH
+          wget https://github.com/lollol911/dre-kernel-android15/releases/download/toolchains/clang-r450784e.tgz -O clang-toolchain.tgz
+          mkdir -p $HOME/clang-toolchain
+          tar -xzf clang-toolchain.tgz -C $HOME/clang-toolchain --strip-components=1
+          echo "$HOME/clang-toolchain/bin" >> $GITHUB_PATH
 
       - name: Build Kernel
         run: |
