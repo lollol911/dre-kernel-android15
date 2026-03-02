@@ -44,7 +44,7 @@ jobs:
           mv kernel-build.zip $GITHUB_WORKSPACE/kernel-build.zip
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: kernel-build
           path: kernel-build.zip
