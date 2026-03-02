@@ -23,7 +23,7 @@ jobs:
 
       - name: Download Clang Toolchain
         run: |
-          wget https://github.com/lollol911/dre-kernel-android15/releases/download/toolchains/clang-r450784e.tgz -O clang-toolchain.tgz
+          wget https://github.com/lollol911/dre-kernel-android15/releases/download/clang/linux-x86-722c840a8e4d58b5ebdab62ce78eacdafd301208-clang-r450784e.tar.gz -O clang-toolchain.tgz
           mkdir -p $HOME/clang-toolchain
           tar -xzf clang-toolchain.tgz -C $HOME/clang-toolchain --strip-components=1
           echo "$HOME/clang-toolchain/bin" >> $GITHUB_PATH
