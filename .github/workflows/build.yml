@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Install dependencies
         run: |
@@ -43,6 +41,8 @@ jobs:
           export LD=ld.lld
           export CROSS_COMPILE=aarch64-linux-gnu-
           make O=$O ARCH=$ARCH dre_defconfig
+          scripts/config --file $O/.config -e CONFIG_SECTION_MISMATCH_WARN_ONLY
+          make O=$O ARCH=$ARCH olddefconfig
           make -j$(nproc) O=$O ARCH=$ARCH CC=$CC LD=$LD CROSS_COMPILE=$CROSS_COMPILE
 
       - name: Package AnyKernel3
