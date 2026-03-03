@@ -1,4 +1,0 @@
-[submodule "dre-kernel-source"]
-	path = dre-kernel-source
-	url = https://github.com/LineageOS/android_kernel_oneplus_sm4350.git
-	branch = lineage-22.2
