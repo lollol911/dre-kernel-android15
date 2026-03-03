@@ -62,8 +62,8 @@ jobs:
           # Create flashable zip
           zip -r kernel-build.zip kernel-zip/
 
-          # Move to workspace
-          mv kernel-build.zip $GITHUB_WORKSPACE/kernel-build.zip
+          # No need to move, just leave it in workspace
+          echo "Kernel zip created at: $PWD/kernel-build.zip"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
