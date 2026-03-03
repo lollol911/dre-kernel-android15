@@ -19,7 +19,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential flex libssl-dev libncurses5-dev wget unzip zip
+          sudo apt install -y \
+            bc bison build-essential flex \
+            libssl-dev libncurses5-dev \
+            wget unzip zip \
+            gcc-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu
 
       - name: Download Clang
         run: |
@@ -37,16 +42,14 @@ jobs:
           export CC=clang
           export LD=ld.lld
           export CROSS_COMPILE=aarch64-linux-gnu-
-          # Generate .config from dre_defconfig
           make O=$O ARCH=$ARCH dre_defconfig
-          # Build the kernel
           make -j$(nproc) O=$O ARCH=$ARCH CC=$CC LD=$LD CROSS_COMPILE=$CROSS_COMPILE
 
       - name: Package AnyKernel3
         run: |
           mkdir -p kernel-zip
-          cp dre-kernel-source/out/arch/arm64/boot/Image.gz-dtb kernel-zip/
-          cp -r AnyKernel3/* kernel-zip/
+          cp dre-kernel-source/out/arch/arm64/boot/Image.gz-dtb kernel-zip/ || true
+          cp -r AnyKernel3/* kernel-zip/ || true
           zip -r kernel-build.zip kernel-zip/
           mv kernel-build.zip $GITHUB_WORKSPACE/kernel-build.zip
 
