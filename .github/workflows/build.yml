@@ -48,9 +48,21 @@ jobs:
       - name: Package AnyKernel3
         run: |
           mkdir -p kernel-zip
-          cp dre-kernel-source/out/arch/arm64/boot/Image.gz-dtb kernel-zip/ || true
+
+          # Debug: show boot directory contents
+          echo "=== Boot directory contents ==="
+          ls -al dre-kernel-source/out/arch/arm64/boot/
+
+          # Copy whichever kernel Image variant exists
+          cp dre-kernel-source/out/arch/arm64/boot/Image* kernel-zip/ 2>/dev/null || true
+
+          # Copy AnyKernel3 contents
           cp -r AnyKernel3/* kernel-zip/ || true
+
+          # Create flashable zip
           zip -r kernel-build.zip kernel-zip/
+
+          # Move to workspace
           mv kernel-build.zip $GITHUB_WORKSPACE/kernel-build.zip
 
       - name: Upload Artifact
